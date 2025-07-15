@@ -1,3 +1,4 @@
+import 'package:evently/firebase_options.dart';
 import 'package:evently/l10n/app_localizations.dart';
 import 'package:evently/provider/app_language_provider.dart';
 import 'package:evently/provider/app_theme_provider.dart';
@@ -7,6 +8,7 @@ import 'package:evently/ui/tabs/home/add_event.dart';
 import 'package:evently/ui/tabs/introduction_screen/onboarding_screen.dart';
 import 'package:evently/utils/app_routes.dart';
 import 'package:evently/utils/app_theme.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'ui/tabs/authentication/login/login_screen.dart';
@@ -14,10 +16,11 @@ import 'ui/tabs/authentication/register/register_screen.dart';
 
 void main()async{
   WidgetsFlutterBinding.ensureInitialized();
-
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   final languageProvider = AppLanguageProvider();
   await languageProvider.loadSavedLanguage();
-
   final themeProvider = AppThemeProvider();
   await themeProvider.loadSavedTheme();
   runApp(MultiProvider(
