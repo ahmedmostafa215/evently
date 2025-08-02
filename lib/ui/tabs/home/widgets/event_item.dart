@@ -1,10 +1,13 @@
+import 'package:evently/model/event.dart';
 import 'package:evently/utils/app_assets.dart';
 import 'package:evently/utils/app_colors.dart';
 import 'package:evently/utils/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class EventItem extends StatelessWidget {
-  const EventItem({super.key});
+  Event event;
+   EventItem({super.key ,required this.event});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +26,8 @@ class EventItem extends StatelessWidget {
             color: AppColors.primaryLight,
             width: 2
           ),
-          image: DecorationImage(image: AssetImage(AppAssets.birthdayCard),fit: BoxFit.fill),
+          image: DecorationImage(
+              image: AssetImage(event.eventImage),fit: BoxFit.fill),
         ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,8 +48,8 @@ class EventItem extends StatelessWidget {
             ),
             child: Column(
               children: [
-                Text('21',style: AppStyles.bold20Primary,),
-                Text('NOV',style: AppStyles.bold14Primary,)
+                Text(event.eventDateTime.day.toString(),style: AppStyles.bold20Primary,),
+                Text(DateFormat('MMM').format(event.eventDateTime),style: AppStyles.bold14Primary,)
               ],
             ),
           ),
@@ -65,7 +69,7 @@ class EventItem extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(child: Text('This is a Birthday Party ',style: AppStyles.bold14Black,)),
+                Expanded(child: Text(event.title,style: AppStyles.bold14Black,)),
                 InkWell(onTap: () {
                   //todo : add to fav tap
                 },

@@ -70,5 +70,6 @@
   "please_enter_event_description" : "Please enter event description",
   "please_choose_date" : "Please Choose Date",
   "please_choose_time" : "Please Choose Time",
-  "event_added_successfully" : "Event Added Successfully"
+  "event_added_successfully" : "Event Added Successfully",
+  "no_events_found" : "No Events Found"
 }

@@ -1,6 +1,7 @@
 import 'package:evently/l10n/app_localizations.dart';
 import 'package:evently/model/event.dart';
 import 'package:evently/provider/app_theme_provider.dart';
+import 'package:evently/provider/event_provider.dart';
 import 'package:evently/ui/tabs/home/widgets/event_tab_item.dart';
 import 'package:evently/ui/tabs/widgets/custom_elevated_button.dart';
 import 'package:evently/ui/tabs/widgets/custom_text_field.dart';
@@ -34,11 +35,13 @@ class _AddEventState extends State<AddEvent> {
   TimeOfDay? selectedTime;
   String formatedTime = '';
   bool isSubmitted = false;
+  late EventProvider eventProvider;
 
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    eventProvider = Provider.of<EventProvider>(context);
     List<String> eventsNameList =[
       AppLocalizations.of(context)!.sport,
       AppLocalizations.of(context)!.birthday,
@@ -289,6 +292,7 @@ class _AddEventState extends State<AddEvent> {
             backgroundColor: AppColors.primaryLight,
           ),
         );
+        eventProvider.getAllEvents();
         Navigator.pop(context);
       },);
     }

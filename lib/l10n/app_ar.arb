@@ -70,6 +70,6 @@
   "please_enter_event_description" : "برجاء ادخل وصف الحدث",
   "please_choose_date" : "برجاء اختيار التاريخ",
   "please_choose_time" : "برجاء اختيار الوقت",
-  "event_added_successfully" : "تم اضافة الحدث بنجاح"
-
+  "event_added_successfully" : "تم اضافة الحدث بنجاح",
+  "no_events_found" : "لا يوجد احداث حاليا"
 }

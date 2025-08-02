@@ -3,6 +3,7 @@ import 'package:evently/firebase_options.dart';
 import 'package:evently/l10n/app_localizations.dart';
 import 'package:evently/provider/app_language_provider.dart';
 import 'package:evently/provider/app_theme_provider.dart';
+import 'package:evently/provider/event_provider.dart';
 import 'package:evently/ui/home_screen.dart';
 import 'package:evently/ui/tabs/authentication/forget_password/forget_password.dart';
 import 'package:evently/ui/tabs/home/add_event.dart';
@@ -27,6 +28,7 @@ void main()async{
   await themeProvider.loadSavedTheme();
   runApp(MultiProvider(
     providers: [
+      ChangeNotifierProvider(create: (context) => EventProvider(),),
       ChangeNotifierProvider(create: (context) => AppLanguageProvider(),),
       ChangeNotifierProvider(create: (context) => AppThemeProvider(),),
     ],
@@ -42,7 +44,7 @@ class MyApp extends StatelessWidget {
     var themeProvider = Provider.of<AppThemeProvider>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: AppRoutes.introRouteName,
+      initialRoute: AppRoutes.homeRouteName,
       routes: {
         AppRoutes.introRouteName: (context) => OnboardingScreen(),
         AppRoutes.homeRouteName: (context) => HomeScreen(),
