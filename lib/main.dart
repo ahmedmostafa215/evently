@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart' show FirebaseFirestore;
 import 'package:evently/firebase_options.dart';
 import 'package:evently/l10n/app_localizations.dart';
 import 'package:evently/provider/app_language_provider.dart';
@@ -19,6 +20,7 @@ void main()async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FirebaseFirestore.instance.disableNetwork();
   final languageProvider = AppLanguageProvider();
   await languageProvider.loadSavedLanguage();
   final themeProvider = AppThemeProvider();
