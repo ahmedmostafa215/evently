@@ -219,4 +219,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get please_enter_event_description => 'Please enter event description';
+
+  @override
+  String get please_choose_date => 'Please Choose Date';
+
+  @override
+  String get please_choose_time => 'Please Choose Time';
+
+  @override
+  String get event_added_successfully => 'Event Added Successfully';
 }

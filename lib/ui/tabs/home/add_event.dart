@@ -1,4 +1,5 @@
 import 'package:evently/l10n/app_localizations.dart';
+import 'package:evently/model/event.dart';
 import 'package:evently/provider/app_theme_provider.dart';
 import 'package:evently/ui/tabs/home/widgets/event_tab_item.dart';
 import 'package:evently/ui/tabs/widgets/custom_elevated_button.dart';
@@ -7,9 +8,12 @@ import 'package:evently/ui/tabs/widgets/date_or_time.dart';
 import 'package:evently/utils/app_assets.dart';
 import 'package:evently/utils/app_colors.dart';
 import 'package:evently/utils/app_styles.dart';
+import 'package:evently/utils/firebase_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class AddEvent extends StatefulWidget {
   const AddEvent({super.key});
@@ -20,6 +24,8 @@ class AddEvent extends StatefulWidget {
 
 class _AddEventState extends State<AddEvent> {
   int selectedIndex = 0;
+  String selectedEventImage = '';
+  String selectedEventName = '';
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   var formKey = GlobalKey<FormState>();
@@ -27,6 +33,7 @@ class _AddEventState extends State<AddEvent> {
   String formatedDate = '';
   TimeOfDay? selectedTime;
   String formatedTime = '';
+  bool isSubmitted = false;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +50,7 @@ class _AddEventState extends State<AddEvent> {
       AppLocalizations.of(context)!.holiday,
       AppLocalizations.of(context)!.eating,
     ];
-    List<String> eventImages =[
+    List<String> eventImagesList =[
       AppAssets.sport,
       AppAssets.birthdayCard,
       AppAssets.meeting,
@@ -54,7 +61,9 @@ class _AddEventState extends State<AddEvent> {
       AppAssets.holiday,
       AppAssets.eating,
     ];
-    var themeProvider = Provider.of<AppThemeProvider>(context);
+    selectedEventImage = eventImagesList[selectedIndex];
+    selectedEventName = eventsNameList[selectedIndex];
+    Provider.of<AppThemeProvider>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.transparentColor,
@@ -71,7 +80,7 @@ class _AddEventState extends State<AddEvent> {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(16),
-                child: Image.asset(eventImages[selectedIndex]),
+                child: Image.asset(selectedEventImage),
               ),
               SizedBox(height: height*0.02,),
               SizedBox(
@@ -123,6 +132,7 @@ class _AddEventState extends State<AddEvent> {
                         color: Theme.of(context).dividerColor,),
                         hintText: AppLocalizations.of(context)!.event_title,
                         hintStyle: Theme.of(context).textTheme.titleMedium,
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
                       SizedBox(height: height*0.01,),
                       Text(AppLocalizations.of(context)!.description,
@@ -136,6 +146,7 @@ class _AddEventState extends State<AddEvent> {
                           return null;
                         },
                         controller: descriptionController,
+                        style: Theme.of(context).textTheme.titleMedium,
                         colorBorderSide: Theme.of(context).cardColor,
                         hintText: AppLocalizations.of(context)!.event_description,
                         hintStyle: Theme.of(context).textTheme.titleMedium,
@@ -145,6 +156,9 @@ class _AddEventState extends State<AddEvent> {
                       DateOrTime(
                           iconDateOrTime: AppAssets.dateIcon,
                           eventDateOrTime: AppLocalizations.of(context)!.event_date,
+                          errorText: isSubmitted && selectedDate == null
+                              ? AppLocalizations.of(context)!.please_choose_date
+                              : null,
                           chooseDateOrTime: selectedDate == null ?
                           AppLocalizations.of(context)!.choose_date :
                           formatedDate ,
@@ -152,6 +166,9 @@ class _AddEventState extends State<AddEvent> {
                       DateOrTime(
                           iconDateOrTime: AppAssets.timeIcon,
                           eventDateOrTime: AppLocalizations.of(context)!.event_time,
+                          errorText: isSubmitted && selectedTime == null
+                              ? AppLocalizations.of(context)!.please_choose_time
+                              : null,
                           chooseDateOrTime: selectedTime == null ?
                           AppLocalizations.of(context)!.choose_time:
                           formatedTime,
@@ -245,8 +262,35 @@ class _AddEventState extends State<AddEvent> {
       }
   }
   void addEvent() {
+    setState(() {
+      isSubmitted = true;
+    });
     if (formKey.currentState?.validate()==true){
-
+      bool isValid = formKey.currentState?.validate() ?? false;
+      if (!isValid || selectedDate == null || selectedTime == null) {
+        return;
+      }
+      Event event =Event(
+          title: titleController.text,
+          eventImage: selectedEventImage,
+          description: descriptionController.text,
+          eventDateTime: selectedDate!,
+          eventName: selectedEventName,
+          eventTime: formatedTime
+      );
+      FirebaseUtils.addEventToFireStore(event).timeout(Duration(milliseconds: 500),
+      onTimeout: () {
+        showTopSnackBar(
+          Overlay.of(context),
+          CustomSnackBar.success(
+            message:
+            AppLocalizations.of(context)!.event_added_successfully,
+            textStyle: Theme.of(context).textTheme.displayLarge!,
+            backgroundColor: AppColors.primaryLight,
+          ),
+        );
+        Navigator.pop(context);
+      },);
     }
   }
 

@@ -219,4 +219,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get please_enter_event_description => 'برجاء ادخل وصف الحدث';
+
+  @override
+  String get please_choose_date => 'برجاء اختيار التاريخ';
+
+  @override
+  String get please_choose_time => 'برجاء اختيار الوقت';
+
+  @override
+  String get event_added_successfully => 'تم اضافة الحدث بنجاح';
 }

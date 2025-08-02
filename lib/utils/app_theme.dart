@@ -10,6 +10,7 @@ class AppTheme{
     dividerColor: AppColors.greyColor,
     canvasColor: AppColors.blackColor,
     cardColor: AppColors.greyColor,
+    indicatorColor: AppColors.primaryLight,
     textTheme: TextTheme(
         headlineLarge: AppStyles.bold20Black,
         bodyMedium: AppStyles.medium16Black,
@@ -61,6 +62,7 @@ class AppTheme{
       dividerColor: AppColors.whiteColor,
       canvasColor: AppColors.whiteColor,
       cardColor: AppColors.primaryLight,
+      indicatorColor: AppColors.whiteColor,
     textTheme: TextTheme(
           headlineLarge: AppStyles.bold20White,
           bodyMedium: AppStyles.medium16White,
